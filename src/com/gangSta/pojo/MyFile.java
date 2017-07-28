@@ -2,7 +2,7 @@ package com.gangSta.pojo;
 
 import java.util.Date;
 
-public class File {
+public class MyFile {
 
 	private String email;
 	private String filename;
@@ -48,7 +48,7 @@ public class File {
 	}
 	@Override
 	public String toString() {
-		return "File [email=" + email + ", filename=" + filename + ", size=" + size + ", update=" + update
+		return "MyFile [email=" + email + ", filename=" + filename + ", size=" + size + ", update=" + update
 				+ ", shareverify=" + shareverify + ", fileid=" + fileid + "]";
 	}
 	

@@ -66,9 +66,9 @@ public class MessageSend {
         BufferedImage bi = verifyCode.getImage();
         //验证码文本信息
         String vText = verifyCode.getText();
-        VerifyCode.output(bi, new FileOutputStream("F:\\b.jpg"));
- 		DataHandler dh = new DataHandler(new FileDataSource("F:\\b.jpg"));//图片路径
- 		img.setDataHandler(dh);
+//        VerifyCode.output(bi, new FileOutputStream("F:\\b.jpg"));
+// 		DataHandler dh = new DataHandler(new FileDataSource("F:\\b.jpg"));//图片路径
+// 		img.setDataHandler(dh);
  		// 创建图片的一个表示用于显示在邮件中显示
  		img.setContentID("b_jpg");
  		contentMulti.addBodyPart(img);

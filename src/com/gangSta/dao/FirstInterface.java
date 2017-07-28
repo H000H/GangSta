@@ -1,4 +1,4 @@
-package com.gangSta.DAO;
+package com.gangSta.dao;
 
 public class FirstInterface {
 
