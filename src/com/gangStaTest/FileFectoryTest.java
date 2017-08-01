@@ -3,6 +3,7 @@ package com.gangStaTest;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.fileupload.FileUploadException;
 
@@ -17,7 +18,19 @@ public class FileFectoryTest {
 	 * @param 用来测试用户文件列表：selectPersonFiles功能
 	 */
 //	public static void main(String[] args) {
-//		
+//		try{
+//			FileFectory fectory=new FileFectory();
+//			fectory.setFileFectory();
+//			Person person=new Person();
+//			person.setEmail("442638790@qq.com");
+//			List<MyFile> list=fectory.selectPersonFiles(person, 1);
+//			for (MyFile myFile : list) {
+//				System.out.println(myFile.getEmail()+myFile.getFilename()+myFile.getUpdate().toString());
+//			}
+//			fectory.closeConnection();
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
 //	}
 	
 	/*
@@ -49,7 +62,7 @@ public class FileFectoryTest {
 //			fectory.setFileFectory();
 //			MyFile myfile =new MyFile();
 //			myfile.setEmail("442638790@qq.com");
-//			myfile.setFileid("AAASOAAAEAAAAI2AAB");
+//			myfile.setFileid("AAASOAAAEAAAAI2AAE");
 //			MyFile vfile=fectory.getFileVerify(myfile);
 //			fectory.closeConnection();
 //			String link="http://localhost:8080/GangSta/GetFileWithVerifyServletTest?verify="+vfile.getShareverify();
@@ -66,7 +79,7 @@ public class FileFectoryTest {
 //				FileFectory fectory=new FileFectory();
 //				fectory.setFileFectory();
 //				MyFile myfile =new MyFile();
-//				myfile.setShareverify("AAASOAAAEAAAAI2AAC");
+////				myfile.setShareverify("AAASOAAAEAAAAI2AAC");
 //				myfile.setFileid(fectory.getFilePathWithVerify("AAASOAAAEAAAAI2AAC"));
 //				fectory.downFile(myfile, userAgent, response)
 //				fectory.closeConnection();

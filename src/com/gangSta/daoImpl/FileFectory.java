@@ -58,8 +58,8 @@ public class FileFectory implements FileDao{
 		int thispage=page*5;
 		int ppage=thispage-4;
 		
-		String sql="SELECT t.*,t.rowid FROM "
-				+ "(SELECT A.*, rownum RN FROM (SELECT * FROM GangStaFile) A WHERE rownum <=?) t "
+		String sql="SELECT t.*,GangStaID FROM "
+				+ "(SELECT A.*, A.rowid GangStaID,rownum RN FROM (SELECT * FROM GangStaFile) A WHERE rownum <=?) t "
 				+ " WHERE RN >= ? and email=?";
 		PreparedStatement pst=null;
 		List<MyFile> list=new ArrayList<>();
