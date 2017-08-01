@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.gangSta.dao.PersonDao;
@@ -162,6 +160,42 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	/**
+	 * 查询用户的登录状态(若为1则不能登录，若为0则可以登录)
+	 */
+	@Override
+	public int getState(String email) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int state = 0;
+		try {
+			con = DBConnection.getConnection();
+			// 搜索出email对应的state的状态
+			String sql = "select state from GANGSTAPERSON where email = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				state = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (Exception e2) {
+				throw new RuntimeException(e2);
+			}
+		}
+		return state;
+	}
+	
+	
+	/**
 	 * 验证码的获取，将发送的验证码存储进数据库以方便注册使用
 	 * 成功返回1
 	 */
@@ -217,7 +251,7 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	/**
-	 * 根据用户输入的email对信息进行搜索 返回一个字符串（验证码）
+	 * 根据用户输入的email对验证码表进行搜索 返回一个字符串（验证码）
 	 */
 	@Override
 	public String checkCode(String email) {
@@ -257,37 +291,6 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	/**
-	 * 根据用户的邮箱修改密码
-	 */
-	@Override
-	public int updatePassword(Person form) {
-
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		try {
-			con = DBConnection.getConnection();
-			String sql = "UPDATE GANGSTAPERSON SET password=? WHERE email = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, form.getPassword());
-			pstmt.setString(2, form.getEmail());
-			pstmt.execute();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				if (pstmt != null)
-					pstmt.close();
-				if (con != null)
-					con.close();
-			} catch (Exception e2) {
-				throw new RuntimeException(e2);
-			}
-		}
-
-		return 1;
-	}
-
-	/**
 	 * 根据传入的email更改其身份id 由0（普通用户）改为1（申请成为会员）
 	 */
 	@Override
@@ -295,22 +298,17 @@ public class PersonDaoImpl implements PersonDao {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int i= 0;
 		try {
 			con = DBConnection.getConnection();
 			String sql = "UPDATE GANGSTAPERSON SET identity = 1 " + "WHERE email = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
-			rs = pstmt.executeQuery();
-			if (rs == null) {
-				return 0;
-			}
+			i = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				if (rs != null)
-					rs.close();
 				if (pstmt != null)
 					pstmt.close();
 				if (con != null)
@@ -320,7 +318,7 @@ public class PersonDaoImpl implements PersonDao {
 			}
 		}
 
-		return 1;
+		return i;
 	}
 
 	/**
@@ -330,19 +328,17 @@ public class PersonDaoImpl implements PersonDao {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int i = 0;
 		try {
 			con = DBConnection.getConnection();
 			String sql = "UPDATE GANGSTAPERSON SET identity = 2 " + "WHERE email = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
-			rs = pstmt.executeQuery();
+			i = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				if (rs != null)
-					rs.close();
 				if (pstmt != null)
 					pstmt.close();
 				if (con != null)
@@ -352,7 +348,7 @@ public class PersonDaoImpl implements PersonDao {
 			}
 		}
 
-		return 1;
+		return i;
 
 	}
 
@@ -500,12 +496,13 @@ public class PersonDaoImpl implements PersonDao {
 
 	/**
 	 * (管理员功能)管理员添加公告
+	 * 成功返回1，失败返回0
 	 */
 	@Override
 	public int insertNotice(Notice notice) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int i = 0;
 		String sql = "insert into GANGSTANOTICE(TITLE,CONTENT,UpdateDate,Author,Url) values (?,?,"
 				+ "sysdate,?,?)";
 		try {
@@ -515,11 +512,8 @@ public class PersonDaoImpl implements PersonDao {
 			pstmt.setString(2, notice.getContent());
 			pstmt.setString(3, notice.getAuthor());
 			pstmt.setString(4, notice.getUrl());
-			rs = pstmt.executeQuery();
-			// 如果sql语句执行不成功，则返回0
-			if (rs == null) {
-				return 0;
-			}
+			i = pstmt.executeUpdate();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -534,7 +528,7 @@ public class PersonDaoImpl implements PersonDao {
 			}
 		}
 		// 如果sql语句执行成功，则返回i
-		return 1;
+		return i;
 	}
 
 	/**
@@ -547,7 +541,7 @@ public class PersonDaoImpl implements PersonDao {
 		ResultSet rs = null;
 		List<Notice> list = new ArrayList<Notice>();
 		String sql = "SELECT b.* FROM (SELECT ROWNUM RN1,n.* FROM GANGSTANOTICE n ORDER BY RN1 DESC) b "
-				+ "WHERE ROWNUM<=5";
+				+ "WHERE ROWNUM<=10";
 		try {
 			con = DBConnection.getConnection();
 			pstmt = con.prepareStatement(sql);
@@ -602,11 +596,6 @@ public class PersonDaoImpl implements PersonDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
 			i = pstmt.executeUpdate();
-			if (i>0) {
-				return i;
- 			}else {
-				return 0;
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -617,8 +606,61 @@ public class PersonDaoImpl implements PersonDao {
 				e2.printStackTrace();
 			}
 		}
-		return 0;
+		return i;
 
 	}
+
+	/**
+	 * 根据主键email更新信息(名字  或者 密码 或者都改)
+	 */
+	public int updateMsg(Person person) {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int i = 0;
+		try {
+			con = DBConnection.getConnection();
+			/*
+			 * 1.得到sql语句前半部分
+			 */
+			StringBuilder baseSql = new StringBuilder("UPDATE GANGSTAPERSON SET  ");
+			StringBuilder intsertSql = new StringBuilder("");
+			StringBuilder comaSql = new StringBuilder(" , ");
+			StringBuilder whereSql = new StringBuilder(" where email = ?");
+			//书名查询
+			String name = person.getName();
+			String password = person.getPassword();
+			String email = person.getEmail();
+			boolean a = name!=null&&!name.trim().isEmpty();
+			boolean b = password!=null&&!password.trim().isEmpty();
+			//若名字存在则添加该语句
+			if (a) {
+				intsertSql.append("name="+name);
+			}
+			//若都存在则添加逗号
+			if (a&&b) {
+				intsertSql.append(comaSql);
+			}
+			//若密码存在则添加该语句
+			if (b) {
+				intsertSql.append(" password = "+password);
+			}
+			String sql = baseSql.append(intsertSql).append(whereSql).toString();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, email);
+			i = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return i;
+	}
+	
 
 }

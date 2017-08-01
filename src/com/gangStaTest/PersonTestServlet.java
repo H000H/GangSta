@@ -1,9 +1,6 @@
 package com.gangStaTest;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gangSta.dao.PersonDao;
-import com.gangSta.daoImpl.PersonDaoImpl;
-import com.gangSta.pojo.Notice;
-import com.gangSta.pojo.Person;
+//import com.gangSta.dao.PersonDao;
+//import com.gangSta.daoImpl.PersonDaoImpl;
+//import com.gangSta.pojo.Notice;
+//import com.gangSta.pojo.Person;
 
 @WebServlet("/PersonTestServlet")
 public class PersonTestServlet extends HttpServlet {
@@ -28,9 +25,9 @@ public class PersonTestServlet extends HttpServlet {
 		System.out.println("进入serlvet");
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		PersonDao personDao = new PersonDaoImpl();
-		Person person = new Person();
-		Notice notice = new Notice();
+//		PersonDao personDao = new PersonDaoImpl();
+//		Person person = new Person();
+//		Notice notice = new Notice();
 		/**
 		 * 注册验证
 		 */
