@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.apache.commons.fileupload.FileUploadException;
 
 import com.gangSta.daoImpl.FileFectory;
+import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
 import com.gangSta.util.DBConnection;
@@ -48,7 +49,7 @@ public class FileFectoryTest {
 //			fectory.setFileFectory();
 //			MyFile myfile =new MyFile();
 //			myfile.setEmail("442638790@qq.com");
-//			myfile.setFileid("AAASOAAAEAAAAI2AAA");
+//			myfile.setFileid("AAASOAAAEAAAAI2AAB");
 //			MyFile vfile=fectory.getFileVerify(myfile);
 //			fectory.closeConnection();
 //			String link="http://localhost:8080/GangSta/GetFileWithVerifyServletTest?verify="+vfile.getShareverify();
@@ -61,13 +62,33 @@ public class FileFectoryTest {
 	 * @param 测试获取使用验证码get文件路径getFilePathWithVerify
 	 */
 //	public static void main(String[] args) {
-//		
+//		 try{
+//				FileFectory fectory=new FileFectory();
+//				fectory.setFileFectory();
+//				MyFile myfile =new MyFile();
+//				myfile.setShareverify("AAASOAAAEAAAAI2AAC");
+//				myfile.setFileid(fectory.getFilePathWithVerify("AAASOAAAEAAAAI2AAC"));
+//				fectory.downFile(myfile, userAgent, response)
+//				fectory.closeConnection();
+//			} catch (SQLException e){
+//				System.out.print("数据库查询出错");
+//		}
 //	}
 	/*
 	 * @param 测试用户使用网盘使用情况：getPersonDiskUsed
 	 */
 //	public static void main(String[] args) {
-//		
+//		try{
+//			FileFectory fectory=new FileFectory();
+//			fectory.setFileFectory();
+//			Person person=new Person();
+//			person.setEmail("442638790@qq.com");
+//			Disk disk=fectory.getPersonDiskUsed(person);
+//			System.out.println(disk.getAll()+"  "+disk.getUsed());
+//			fectory.closeConnection();
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
 //	}
 	/*
 	 * @param 测试添加文件信息的功能：insertPersonFileInfo
@@ -100,13 +121,16 @@ public class FileFectoryTest {
 //			fectory.setFileFectory();
 //			MyFile myfile =new MyFile();
 //			myfile.setFileid("AAASOAAAEAAAAI2AAC");
+//			myfile.setEmail("442638790@qq.com");
 //			switch(fectory.deleteFile(myfile)){
 //				case 1:System.out.println("文件不存在");break;
 //				case 2:System.out.println("删除文件失败");break;
 //				case 0:System.out.println("删除成功");break;
+//				case 3:System.out.println("数据库删除没有成功");break;
 //			}
 //			fectory.closeConnection();
 //		} catch (SQLException e){
+//			e.printStackTrace();
 //			System.out.print("数据库查询出错");
 //		}
 //	}
