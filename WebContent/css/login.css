@@ -1,0 +1,238 @@
+html,body{
+  /*font-size: 62.5%;*/
+  font-family: Microsoft YaHei,SimHei,Tahoma!important;
+  color: #222;
+  overflow-x: hidden;
+}
+
+nav{
+  position: absolute;
+  z-index: 99;
+  display: inline-block;
+  width: 100%;
+  height: 80px;
+  background-color: : #fff;
+}
+nav h1{
+  display: inline-block;
+  margin-left: 40px;
+  float: left;
+  width: 200px;
+  color: white;
+}
+nav ul{
+  display: inline-flex;
+  margin-top: 25px;
+  margin-right: 20px;
+  justify-content: space-around;
+  width: 500px;
+  height: 18px;
+  float: right;
+}
+nav ul li{
+  display: inline-block;	
+  list-style-type:none;
+}
+nav ul li:nth-child(1) a{
+  color: #f00;
+}
+nav ul li a{
+  display: inline-block;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+}
+nav ul li a:hover{
+  text-decoration: underline;
+}
+
+.banner{
+  margin-top: -16px;
+  width: 100%;
+  height: 756px;
+}
+#banner{
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  transform: matrix(1, 0, 0, 1, 0, 0);
+  transition: all 500ms linear;
+}
+.login-banner-0{
+  background: url(.././image/banner1.jpg) no-repeat center center;
+}
+.login-banner-1{
+  background: url(.././image/banner2.jpg) no-repeat center center;
+}
+.login-banner-2{
+  background: url(.././image/banner3.jpg) no-repeat center center;
+}
+
+/*form*/
+.login-page {
+  position: absolute;
+  z-index: 99;
+  top: 6%;
+  left: 60%;
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form button {
+  margin-top: 5px;
+  font-family: "Microsoft YaHei","Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.form .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+.form .register-form {
+  display: none;
+}
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.container:before, .container:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.container .info {
+  margin: 50px auto;
+  text-align: center;
+}
+.container .info h1 {
+  margin: 0 0 15px;
+  padding: 0;
+  font-size: 36px;
+  font-weight: 300;
+  color: #1a1a1a;
+}
+.container .info span {
+  color: #4d4d4d;
+  font-size: 12px;
+}
+.container .info span a {
+  color: #000000;
+  text-decoration: none;
+}
+.container .info span .fa {
+  color: #EF3B3A;
+}
+/*form摇晃效果*/
+.shake_effect{
+  -webkit-animation-name: shake;
+  animation-name: shake;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+}
+@-webkit-keyframes shake {
+  from, to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+@keyframes shake {
+  from, to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+p.center{
+  color: #fff;font-family: "Microsoft YaHei";
+}
+
+.edition{
+  display: inline-block;
+  width: 100%;
+  min-height: 150px;
+}
+.edition ul{
+  display: inline-flex;
+}
+.edition ul li{
+  display: inline-block;
+  list-style-type: none;
+  cursor: pointer;
+  background-image: url(.././image/);
+}
+
+footer{
+  display: block;
+  width: 100%;
+  height: 26px;
+  color: #b6bac3;
+}
+footer>div{
+  display: inline-block;
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+}
+footer>div a{
+  cursor: pointer;
+  text-decoration: none;
+}

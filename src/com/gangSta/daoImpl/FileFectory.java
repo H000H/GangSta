@@ -486,11 +486,11 @@ public class FileFectory implements FileDao{
 		int result=0+pst.executeUpdate();
 		closefun1(null, pst);
 		
-		String sql1="update GangstaFileTable set fsize=fsize-(select fsize from Gangstafile where rowid=?) where email=?";
+		String sql1="update GangstaFileTable set fsize=fsize-(select fsize from Gangstafile where rowid=?) where email in(select email from GangStaFile where rowid=?)";
 		PreparedStatement pst1=null;
 		pst1=conn.prepareStatement(sql1);
 		pst1.setString(1,myfile.getFileid());
-		pst1.setString(2,myfile.getEmail());
+		pst1.setString(2,myfile.getFileid());
 		result+=pst1.executeUpdate();
 		closefun1(null, pst1);
 		return result;

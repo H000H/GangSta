@@ -185,5 +185,15 @@ public class FileFectoryTest {
 //			System.out.print("数据库查询出错");
 //		}
 //	}
+	public static void main(String[] args) {
+		
+//		try{
+//			int a=Integer.parseInt("1");
+//			System.out.print(a);
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}finally{
+//		}
+	}
 	
 }
