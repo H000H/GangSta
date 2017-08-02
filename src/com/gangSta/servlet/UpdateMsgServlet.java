@@ -8,20 +8,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.gangSta.pojo.Person;
 import com.gangSta.service.PersonService;
 
-import net.sf.json.JSONObject;
-
 /**
- * 登录功能
+ * 更新名字、密码或者两个都更新
  * @author Administrator
  *
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/UpdateMsgServlet")
+public class UpdateMsgServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,23 +30,28 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html;charset=utf-8");// 响应编码
 		PersonService personService = new PersonService();
 		Person form = new Person();
-		// 获取表单数据
-		String password = request.getParameter("password");
-		String email = request.getParameter("email");
+		//从前端获取email、name、password元素
+		String email = request.getParameter("******");
+		String name = request.getParameter("******");
+		String password = request.getParameter("******");
+		//封装成person对象
 		form.setEmail(email);
+		form.setName(name);
 		form.setPassword(password);
-		Person person = personService.loginPerson(form);
-		if (person.getName()!=null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("person", person);
-			request.getRequestDispatcher("******").forward(request, response);
+		int i = personService.updateMsg(form);
+		if (i>0) {
+			String str = "{\"message\":\"更新成功！\"}";
+			PrintWriter out = response.getWriter();
+			out.write(str);
+			out.flush();
+			out.close();
+		}else {
+			String str = "{\"message\":\"更新失败！\"}";
+			PrintWriter out = response.getWriter();
+			out.write(str);
+			out.flush();
+			out.close();
 		}
-		JSONObject json = JSONObject.fromObject(person);
-		PrintWriter out = response.getWriter();
-		out.write(json.toString());
-		out.flush();
-		out.close();
-		
 	}
 
 }
