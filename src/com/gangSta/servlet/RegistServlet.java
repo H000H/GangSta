@@ -14,6 +14,11 @@ import com.gangSta.service.PersonService;
 
 import net.sf.json.JSONArray;
 
+/**
+ * 注册功能
+ * @author Administrator
+ *
+ */
 @WebServlet("/RegistServlet")
 public class RegistServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

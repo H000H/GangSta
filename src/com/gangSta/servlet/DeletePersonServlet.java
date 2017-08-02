@@ -13,43 +13,33 @@ import javax.servlet.http.HttpSession;
 import com.gangSta.pojo.Person;
 import com.gangSta.service.PersonService;
 
-import net.sf.json.JSONObject;
-
 /**
- * 登录功能
+ * 管路员删除用户
  * @author Administrator
  *
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/DeletePersonServlet")
+public class DeletePersonServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	
 		request.setCharacterEncoding("UTF-8");// 请求编码(post)
 		response.setContentType("text/html;charset=utf-8");// 响应编码
 		PersonService personService = new PersonService();
-		Person form = new Person();
-		// 获取表单数据
-		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		form.setEmail(email);
-		form.setPassword(password);
-		Person person = personService.loginPerson(form);
-		if (person.getName()!=null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("person", person);
-			request.getRequestDispatcher("******").forward(request, response);
-		}
-		JSONObject json = JSONObject.fromObject(person);
+		HttpSession session = request.getSession();
+		Person person = (Person) session.getAttribute("person");
+		//从session中获取登录人的email和身份信息(state)
+		String email = request.getParameter("*****");
+		int state = person.getState();
+		String str = personService.deletePerson(email, state);
 		PrintWriter out = response.getWriter();
-		out.write(json.toString());
+		out.write(str);
 		out.flush();
 		out.close();
-		
 	}
 
 }
