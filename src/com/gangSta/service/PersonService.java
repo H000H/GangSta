@@ -80,6 +80,23 @@ public class PersonService {
 			return person;
 		}
 		
+		/**
+		 * 登录方法
+		 * @param form
+		 * @return
+		 * @throws Exception
+		 * <错误提示>
+		 * <p>0:添加失败</p>
+		 * <p>1：验证码错误</p>
+		 * <p>2：邮箱已经注册</p>
+		 * <p>3：添加成功</p>
+		 */
+		public String getPassword(String email) {
+			
+			Person person = new Person();
+			person = personDao.findByEmail(email);
+			return person.getPassword();
+		}
 		
 		/**
 		 * 存储验证码至数据库
