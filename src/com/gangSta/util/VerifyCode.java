@@ -82,7 +82,6 @@ public class VerifyCode {
 	}
 
 	public String getText() {
-		System.out.println("进入VerifyCode");
 		return text;
 	}
 
