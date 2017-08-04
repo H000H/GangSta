@@ -33,14 +33,15 @@ public class InsertNoticeServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Person person = (Person) session.getAttribute("person");
 		//从session中获取登录人的email和身份信息(state)
-		int state = person.getState();
+		int identity = person.getIdentity();
 		Notice notice = new Notice();
 		//从前端获取到公告数据
-		notice.setTitle(request.getParameter("*****"));
-		notice.setContent(request.getParameter("*****"));
-		notice.setAuthor(request.getParameter("*****"));
+		notice.setTitle(request.getParameter("title"));
+		notice.setContent(request.getParameter("content"));
+		notice.setAuthor(person.getName());
 		notice.setUrl(request.getParameter("*****"));
-		String str = personService.insertNotice(notice, state);
+		System.out.println("notice:"+notice);
+		String str = personService.insertNotice(notice, identity);
 		PrintWriter out = response.getWriter();
 		out.write(str);
 		out.flush();

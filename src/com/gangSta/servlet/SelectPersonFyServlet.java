@@ -2,6 +2,8 @@ package com.gangSta.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,16 +15,16 @@ import javax.servlet.http.HttpSession;
 import com.gangSta.pojo.Person;
 import com.gangSta.service.PersonService;
 
-/**
- * 申请成为会员
- * @author Administrator
- *
- */
-@WebServlet("/ApplyForVipServlet")
-public class ApplyForVipServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+import net.sf.json.JSONArray;
 
+/**
+ * Servlet implementation class SelectPersonFyServlet
+ */
+@WebServlet("/SelectPersonFyServlet")
+public class SelectPersonFyServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,14 +32,12 @@ public class ApplyForVipServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");// 请求编码(post)
 		response.setContentType("text/html;charset=utf-8");// 响应编码
 		PersonService personService = new PersonService();
-		HttpSession session = request.getSession();
-		Person person = (Person) session.getAttribute("person");
-		//从session中获取登录人的email和身份信息(state)
-		String email = person.getEmail();
-		int identity = person.getIdentity();
-		String str = personService.applyForVip(email,identity);
+		List<Person> list = new ArrayList<Person>();
+		int page = Integer.parseInt(request.getParameter("pagenumber"));
+		list = personService.selectPersonFy(page);
+		JSONArray json = JSONArray.fromObject(list);
 		PrintWriter out = response.getWriter();
-		out.write(str);
+		out.write("{\"list\":"+json.toString()+"}");
 		out.flush();
 		out.close();
 		

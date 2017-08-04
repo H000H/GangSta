@@ -20,31 +20,35 @@ public class PersonService {
 		 * @return
 		 * @throws Exception
 		 * <错误提示>
-		 * <p>0:添加失败</p>
-		 * <p>1：验证码错误</p>
+		 * <p>3：验证码错误</p>
 		 * <p>2：邮箱已经注册</p>
-		 * <p>3：添加成功</p>
+		 * <p>1：添加成功</p>
+		 * <p>0:添加失败</p>
 		 */
 		public int registPerson(Person form) throws Exception {
 
 			Person person = new Person();
 			int i = 0;
-			//对前端传送的vCode进行判断,若验证码不同，返回1
-			String t_mail = personDao.checkCode(form.getEmail());
-			if (!t_mail.equals(form.getVerify())) {
-				i = 1;
+			//对前端传送的vCode进行判断,若验证码不同，返回3
+			String t_verify = personDao.checkCode(form.getEmail());
+			System.out.println("数据库中的："+form.getVerify());
+			System.out.println("service:"+t_verify);
+			if (!t_verify.equals(form.getVerify())) {
+				i = 3;
 				return i;
 			}
 			// person对应从数据库查询出来的的person
-			//不为空表示该email已经被注册,返回参数2
+			//为空表示该email已经被注册,返回参数2
 			person = personDao.findByEmail(form.getEmail());
 			if (person.getEmail()!=null) {
 				i = 2;
 				return i;
 			}
-			i = personDao.registPerson(form);//返回插入结果,成功为3
-			
+			//否则表示未被注册,返回1
+			i = personDao.registPerson(form);
 			return i;
+			
+			
 		}
 		
 		/**
@@ -80,7 +84,22 @@ public class PersonService {
 			return person;
 		}
 		
-		
+		/**
+		 * 登录方法
+		 * @param form
+		 * @return
+		 * @throws Exception
+		 * <错误提示>
+		 * <p>0:添加失败</p>
+		 * <p>1：验证码错误</p>
+		 * <p>2：邮箱已经注册</p>
+		 * <p>3：添加成功</p>
+		 */
+		public List<Person> selectPersonFy(int page){
+			List<Person> list = new ArrayList<>();
+			list = personDao.selectAllFy(page);
+			return list;
+		}
 		/**
 		 * 存储验证码至数据库
 		 * @param personVerify
@@ -131,16 +150,18 @@ public class PersonService {
 		 * <p>1：申请会员用户</p>
 		 * <p>2：正式会员</p>
 		 */
-		public String applyForVip(String email,int state) {
+		public String applyForVip(String email,int identity) {
 			int i = 0;
 			String str = null;
 			//管理员为-1,只有0(普通用户才能申请)
-			switch (state) {
+			switch (identity) {
 			case 0:
 				i = personDao.applyForVip(email);
 				if (i>0) {
 					str = "{\"message\":\"申请成功\"}";
 					return str;
+				}else {
+					str = "{\"message\":\"申请失败\"}";
 				}
 				break;
 			case 1:
@@ -148,6 +169,9 @@ public class PersonService {
 				break;
 			case 2:
 				str = "{\"message\":\"你已经已经是会员了\"}";
+				break;
+			default:
+					str = "{\"message\":\"瓜皮不用申请\"}";
 				break;
 			}
 			return str;
@@ -164,10 +188,10 @@ public class PersonService {
 		 * <p>1：申请会员用户</p>
 		 * <p>2：正式会员</p>
 		 */
-		public String agreeForVip(String email,int state) {
+		public String agreeForVip(String email,int identity) {
 			String str = null;
 			//管理员为-1,只有0(普通用户才能申请)
-			if (state == -1) {
+			if (identity == -1) {
 				int i = personDao.agreeForVip(email);
 				if (i>0) {
 					str = "{\"message\":\"批准成功\"}";
@@ -193,10 +217,10 @@ public class PersonService {
 		 * <p>1：申请会员用户</p>
 		 * <p>2：正式会员</p>
 		 */
-		public String insertNotice(Notice notice,int state) {
+		public String insertNotice(Notice notice,int identity) {
 			String str = null;
 			//管理员为-1,只有0(普通用户才能申请)
-			if (state == -1) {
+			if (identity == -1) {
 				int i = personDao.insertNotice(notice);
 				if (i>0) {
 					str = "{\"message\":\"添加成功\"}";
@@ -237,11 +261,11 @@ public class PersonService {
 		 * <p>1：申请会员用户</p>
 		 * <p>2：正式会员</p>
 		 */
-		public String deletePerson(String email,int state) {
+		public String deletePerson(String email,int identity) {
 			String str = null;
 			//管理员为-1,只有0(普通用户才能申请)
-			if (state == -1) {
-				int i = personDao.agreeForVip(email);
+			if (identity == -1) {
+				int i = personDao.deletePerson(email);
 				if (i>0) {
 					str = "{\"message\":\"删除成功\"}";
 					return str;

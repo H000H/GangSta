@@ -48,8 +48,6 @@ public class GetDiskInfoServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person persontemp=(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(persontemp.getEmail()==null||persontemp.getState()!=1)
-				return;
 			FileFectory fectory=new FileFectory();
 			fectory.setFileFectory();
 			Disk disk=fectory.getDiskInfo();

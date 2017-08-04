@@ -33,9 +33,10 @@ public class DeletePersonServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Person person = (Person) session.getAttribute("person");
 		//从session中获取登录人的email和身份信息(state)
-		String email = request.getParameter("*****");
-		int state = person.getState();
-		String str = personService.deletePerson(email, state);
+		String email = request.getParameter("email");
+		int identity = person.getIdentity();
+		System.out.println("该用户的身份："+identity);
+		String str = personService.deletePerson(email, identity);
 		PrintWriter out = response.getWriter();
 		out.write(str);
 		out.flush();

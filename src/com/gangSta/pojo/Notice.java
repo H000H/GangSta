@@ -7,7 +7,7 @@ public class Notice {
 	private String id;
 	private String title;
 	private String content;
-	private Timestamp updateDate;
+	private String updateDate;
 	private String author;
 	private String url;
 
@@ -35,11 +35,11 @@ public class Notice {
 		this.content = content;
 	}
 
-	public Timestamp getUpdateDate() {
+	public String getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 

@@ -11,6 +11,7 @@ import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
+import com.gangSta.util.CreatMD5;
 import com.gangSta.util.DBConnection;
 
 public class FileFectoryTest {
@@ -186,7 +187,7 @@ public class FileFectoryTest {
 //		}
 //	}
 	public static void main(String[] args) {
-		
+//		System.out.print(CreatMD5.getMd5("weixin@159123_123"));
 //		try{
 //			int a=Integer.parseInt("1");
 //			System.out.print(a);

@@ -16,9 +16,11 @@ import net.sf.json.JSONObject;
 import com.gangSta.dao.PersonDao;
 import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.daoImpl.PersonDaoImpl;
+import com.gangSta.pojo.Admin;
 import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
+import com.gangSta.pojo.User;
 
 /**
  * Servlet implementation class InitialServlet
@@ -51,8 +53,8 @@ public class InitialServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person persontemp=(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(persontemp.getEmail()==null||persontemp.getState()!=1)
-				return;
+			System.out.println(persontemp.getEmail()+persontemp.getIdentity());
+			;
 			//管理员和普通用户的操作不同
 			FileFectory filefectory=new FileFectory();
 			filefectory.setFileFectory();
@@ -61,12 +63,17 @@ public class InitialServlet extends HttpServlet {
 				Disk disk=filefectory.getDiskInfo();
 				int pagenumber=personDao.getPages(personDao.selectAllCounts());
 				List<Person> list=personDao.selectAllFy(1);
-				result=JSONObject.fromObject(new Admin(pagenumber, persontemp, list, disk)).toString();
+				Admin admin=new Admin(pagenumber, persontemp, list, disk);
+				System.out.println("总页数"+pagenumber);
+//				System.out.println(admin.toxxx());
+				result=JSONObject.fromObject(admin).toString();
 			}else{
 				Disk disk=filefectory.getPersonDiskUsed(persontemp);
 				int pagenumber=filefectory.selectFilePage(persontemp);
 				List<MyFile> list=filefectory.selectPersonFiles(persontemp, 1);
-				result=JSONObject.fromObject(new User(pagenumber, persontemp, list, disk)).toString();
+				User user=new User(pagenumber, persontemp, list, disk);
+//				System.out.println(user.toxxx());;
+				result=JSONObject.fromObject(user).toString();
 			}
 			filefectory.closeConnection();
 		}catch(Exception e){
@@ -75,78 +82,11 @@ public class InitialServlet extends HttpServlet {
 		}finally{
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter out=response.getWriter();
+			System.out.println(result);
 			out.write(result);
 			out.flush();
 			out.close();
 		}
-	}
-	class Admin{
-		private int page;
-		private Person person;
-		private List<Person> list;
-		private Disk disk;
-		public Admin(int page,Person person,List<Person> list,Disk disk) {
-			this.disk = disk;this.page = page;this.person = person;this.list = list;
-		}
-		public Disk getDisk() {
-			return disk;
-		}
-		public void setDisk(Disk disk) {
-			this.disk = disk;
-		}
-		public int getPage() {
-			return page;
-		}
-		public void setPage(int page) {
-			this.page = page;
-		}
-		public Person getPerson() {
-			return person;
-		}
-		public void setPerson(Person person) {
-			this.person = person;
-		}
-		public List<Person> getList() {
-			return list;
-		}
-		public void setList(List<Person> list) {
-			this.list = list;
-		}
-		
-	}
-	class User{
-		private int page;
-		private Person person;
-		private List<MyFile> list;
-		private Disk disk;
-		public User(int page,Person person,List<MyFile> list,Disk disk) {
-			this.disk = disk;this.page = page;this.person = person;this.list = list;
-		}
-		public Disk getDisk() {
-			return disk;
-		}
-		public void setDisk(Disk disk) {
-			this.disk = disk;
-		}
-		public int getPage() {
-			return page;
-		}
-		public void setPage(int page) {
-			this.page = page;
-		}
-		public Person getPerson() {
-			return person;
-		}
-		public void setPerson(Person person) {
-			this.person = person;
-		}
-		public List<MyFile> getList() {
-			return list;
-		}
-		public void setList(List<MyFile> list) {
-			this.list = list;
-		}
-		
 	}
 
 }

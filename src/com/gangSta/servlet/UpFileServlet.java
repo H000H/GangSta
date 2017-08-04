@@ -42,13 +42,10 @@ public class UpFileServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String result="";
+		String result="...";
 		try {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
-			if(person==null||person.getState()!=1){
-				return;
-			}
 			FileFectory fectory=new FileFectory();
 			fectory.setFileFectory();
 			switch(fectory.upFile(request, person)){

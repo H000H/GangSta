@@ -17,7 +17,7 @@ import net.sf.json.JSONObject;
 import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
-import com.gangSta.servlet.SelectPersonFilesServlet.TempObject;
+import com.gangSta.pojo.TempObject;
 
 /**
  * Servlet implementation class AdminSelectPersonFilesServlet
@@ -52,8 +52,6 @@ public class AdminSelectPersonFilesServlet extends HttpServlet {
 			Person person=new Person();
 			person.setIdentity(persontemp.getIdentity());
 			//判断是否session为空
-			if(person==null||person.getIdentity()==-1)
-				return;
 			person.setEmail((String)request.getParameter("email"));
 			int page=Integer.parseInt((String)request.getParameter("page"));
 			//判断是否有数据
@@ -65,7 +63,8 @@ public class AdminSelectPersonFilesServlet extends HttpServlet {
 			if(page>pagenumber)
 				return;
 			List<MyFile> list=fectory.selectPersonFiles(person, page);
-			result=JSONObject.fromObject(new TempObject(pagenumber, list)).toString();
+			TempObject object=new TempObject(page, list);
+			result=JSONObject.fromObject(object).toString();
 			fectory.closeConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -78,13 +77,6 @@ public class AdminSelectPersonFilesServlet extends HttpServlet {
 			out.close();
 		}
 	}
-	class TempObject{
-		int pagenumber;
-		List<MyFile> list;
-		public TempObject(int p,List<MyFile> list) {
-			this.pagenumber=p;
-			this.list=list;
-		}
-	}
+	
 
 }

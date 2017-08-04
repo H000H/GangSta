@@ -24,8 +24,8 @@ public class DateFormat {
 
 	}
 	
-	public static void main(String[] args) {
-		Date date = new Date();
-		DateFormat.formatDate(date);
-	}
+//	public static void main(String[] args) {
+//		Date date = new Date();
+//		DateFormat.formatDate(date);
+//	}
 }

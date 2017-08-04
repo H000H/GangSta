@@ -15,7 +15,6 @@ import net.sf.json.JSONObject;
 
 import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.Disk;
-import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
 
 /**
@@ -48,9 +47,6 @@ public class GetPersonDiskInfoServlet extends HttpServlet {
 		try {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
-			//判断是否session为空
-			if(person==null||person.getState()!=1)
-				return;
 			FileFectory fectory=new FileFectory();
 			fectory.setFileFectory();
 			Disk disk=fectory.getPersonDiskUsed(person);

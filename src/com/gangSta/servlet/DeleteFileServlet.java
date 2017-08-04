@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
 
 import com.gangSta.daoImpl.FileFectory;
-import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
 
@@ -49,17 +47,17 @@ public class DeleteFileServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(person==null||person.getState()!=1)
-				return;
 			MyFile myfile =new MyFile();
 			if(person.getIdentity()==-1){
-				
+				myfile.setEmail((String)request.getParameter("email"));
 			}else{
 				myfile.setEmail(person.getEmail());
 			}	
 			myfile.setFileid((String)request.getParameter("fileid"));
 			FileFectory fectory=new FileFectory();
 			fectory.setFileFectory();
+			System.out.println(myfile.getEmail()+myfile.getFileid());
+			System.out.println(myfile.getEmail()+myfile.getFileid());
 			switch(fectory.deleteFile(myfile)){
 				case 1:result="文件不存在";break;
 				case 2:result="删除文件失败";break;
