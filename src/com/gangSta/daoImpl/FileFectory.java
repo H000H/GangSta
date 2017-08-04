@@ -36,7 +36,7 @@ import com.gangSta.util.DBConnection;
  */
 public class FileFectory implements FileDao{
 	//web的根目录绝对地址
-	public static final String WebServiceConentPath="F:\\Jworkspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp2\\wtpwebapps\\GangSta\\WEB-INF\\userfile";
+	public static final String WebServiceConentPath="C:\\Users\\new\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\GangSta";
 	public Connection conn;
 	public FileFectory() {
 	}
