@@ -37,7 +37,8 @@ public class SelectNoticeServlet extends HttpServlet {
 		list = personService.selectNotice();
 		JSONArray json = JSONArray.fromObject(list);
 		PrintWriter out = response.getWriter();
-		out.write(json.toString());
+		out.write("{\"content\":"+json.toString()+"}");
+		System.out.println("servlet中的："+json.toString());
 		out.flush();
 		out.close();
 	}

@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
 
 import com.gangSta.daoImpl.FileFectory;
-import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
 
@@ -49,8 +47,6 @@ public class GetFileVerifyServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(person==null||person.getState()!=1)
-				return;
 			
 			FileFectory fectory=new FileFectory();
 			fectory.setFileFectory();
@@ -59,7 +55,7 @@ public class GetFileVerifyServlet extends HttpServlet {
 			myfile.setFileid((String)request.getParameter("fileid"));
 			myfile=fectory.getFileVerify(myfile);
 			fectory.closeConnection();
-			result="http://localhost:8080/GangSta/GetFileWithVerifyServletTest?verify="+myfile.getShareverify();
+			result="http://localhost/GangSta/GetFileWithVerifyServlet?verify="+myfile.getShareverify();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			result="数据库出错啦";

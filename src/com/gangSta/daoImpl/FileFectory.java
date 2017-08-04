@@ -36,7 +36,7 @@ import com.gangSta.util.DBConnection;
  */
 public class FileFectory implements FileDao{
 	//web的根目录绝对地址
-	public static final String WebServiceConentPath="C:\\Users\\new\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\GangSta\\WEB-INF\\userfile";
+	public static final String WebServiceConentPath="F:\\Jworkspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp2\\wtpwebapps\\GangSta\\WEB-INF\\userfile";
 	public Connection conn;
 	public FileFectory() {
 	}
@@ -74,8 +74,10 @@ public class FileFectory implements FileDao{
 			file.setEmail(rs.getString(1));
 			file.setFilename(rs.getString(2));
 			file.setSize(rs.getLong(3));
-			file.setUpdate(rs.getDate(4));
+//			file.setUpdate(new java.util.Date(rs.getDate(4).getTime()));
+			file.setUpdate(rs.getTimestamp(4).toString());
 			file.setShareverify(rs.getString(6));
+			file.setFileid(rs.getString(7));
 			list.add(file);
 		}
 		closefun1(rs, pst);
@@ -176,19 +178,20 @@ public class FileFectory implements FileDao{
 		List<FileItem> list = upload.parseRequest(request);
 		for(FileItem item : list){
 			//如果fileitem中封装的是普通输入项的数据
-			if(item.isFormField()){
-				String name = item.getFieldName();
-				//解决普通输入项的数据的中文乱码问题
-				special = item.getString("UTF-8");
-				//value = new String(value.getBytes("iso8859-1"),"UTF-8");
-			}
-			else{//如果fileitem中封装的是上传文件
+//			if(item.isFormField()){
+//				String name = item.getFieldName();
+//				//解决普通输入项的数据的中文乱码问题
+//				special = item.getString("UTF-8");
+//				//value = new String(value.getBytes("iso8859-1"),"UTF-8");
+//			}
+//			else{//如果fileitem中封装的是上传文件
 				//得到上传的文件名称，
 				String filename = item.getName();
+				System.out.println("weishamieyou zheg ");
 				System.out.println(filename);
-				if(filename==null || filename.trim().equals("")){
-					continue;
-				}
+//				if(filename==null || filename.trim().equals("")){
+//					continue;
+//				}
 				Disk disk=getPersonDiskUsed(person);
 				//超出大小,返回错误码为2
 				if(disk.getAll()<=disk.getUsed()+item.getSize()){
@@ -224,7 +227,7 @@ public class FileFectory implements FileDao{
 			     out.close();
 			     //这个是用来处理用来修改数据库
 			     System.out.print(insertFileInfo(dbfile));
-				}
+//				}
 			}
 		//正确返回结果为3
 		return 3;
@@ -497,7 +500,7 @@ public class FileFectory implements FileDao{
 	}
 	@Override
 	public int selectFilePage(Person person) throws SQLException {
-		String sql="select sum(rownum) from gangStaFile where email=?";
+		String sql="select count(rownum) from gangStaFile where email=?";
 		PreparedStatement pst=null;
 		pst=conn.prepareStatement(sql);
 		pst.setString(1,person.getEmail());
@@ -505,6 +508,7 @@ public class FileFectory implements FileDao{
 		ResultSet rs=pst.executeQuery();
 		rs.next();
 		result=rs.getInt(1);
+		result/=10;
 		closefun1(null, pst);
 		return ++result;
 	}

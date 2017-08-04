@@ -33,9 +33,9 @@ public class AgreeForVipServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Person person = (Person) session.getAttribute("person");
 		//从session中获取登录人的email和身份信息(state)
-		String email = request.getParameter("*****");
-		int state = person.getState();
-		String str = personService.agreeForVip(email, state);
+		String email = request.getParameter("email");
+		int identity = person.getIdentity();
+		String str = personService.agreeForVip(email, identity);
 		PrintWriter out = response.getWriter();
 		out.write(str);
 		out.flush();

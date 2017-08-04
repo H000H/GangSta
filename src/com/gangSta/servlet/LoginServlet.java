@@ -23,11 +23,8 @@ import net.sf.json.JSONObject;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");// 请求编码(post)
 		response.setContentType("text/html;charset=utf-8");// 响应编码
@@ -38,18 +35,22 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		form.setEmail(email);
 		form.setPassword(password);
+		System.out.println("表单：" + form);
 		Person person = personService.loginPerson(form);
-		if (person.getName()!=null) {
+		if (person.getName() != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("person", person);
-			request.getRequestDispatcher("******").forward(request, response);
 		}
+		// request.getRequestDispatcher("index.html").forward(request,
+		// response);
+		// }else{
 		JSONObject json = JSONObject.fromObject(person);
 		PrintWriter out = response.getWriter();
 		out.write(json.toString());
+		// out.write("worry");
 		out.flush();
 		out.close();
-		
-	}
+		// }
 
+	}
 }

@@ -7,7 +7,7 @@ public class MyFile {
 	private String email;
 	private String filename;
 	private long size;
-	private Date update;
+	private String update;
 	private String shareverify;
 	private String fileid;
 	public String getFileid() {
@@ -34,10 +34,10 @@ public class MyFile {
 	public void setSize(long size) {
 		this.size = size;
 	}
-	public Date getUpdate() {
+	public String getUpdate() {
 		return update;
 	}
-	public void setUpdate(Date update) {
+	public void setUpdate(String update) {
 		this.update = update;
 	}
 	public String getShareverify() {

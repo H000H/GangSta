@@ -49,13 +49,8 @@ public class SelectPersonFilesServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(person==null||person.getState()!=1)
-				return;
-			person.setEmail((String)request.getParameter("email"));
-			int page=Integer.parseInt((String)request.getParameter("page"));
+			int page=Integer.parseInt((String)request.getParameter("pagenumber"));
 			//判断是否有数据
-			if(person.getEmail()==null||page<=0)
-				return;
 			FileFectory fectory=new FileFectory();
 			fectory.setFileFectory();
 			int pagenumber=fectory.selectFilePage(person);

@@ -26,7 +26,7 @@ public class SaveCodeServlet extends HttpServlet {
        // 验证码文本信息(后台产生)
         String vText = verifyCode.getText();
         //获取前端传的email
-        String email = request.getParameter("r_email");
+        String email = request.getParameter("email");
         try {
 			MessageSend.sendMessage(vText, email);
 			

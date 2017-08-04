@@ -78,12 +78,12 @@ public class PersonDaoImpl implements PersonDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
 			rs = pstmt.executeQuery();
-			/*
-			 * 把rs转换成User类型；返回
-			 */
-			if (rs == null) {
-				return null;
-			}
+//			/*
+//			 * 把rs转换成User类型；返回
+//			 */
+//			if (rs == null) {
+//				return null;
+//			}
 			while (rs.next()) {
 				// 转换成Person对象并返回
 				person.setName(rs.getString("NAME"));
@@ -361,10 +361,10 @@ public class PersonDaoImpl implements PersonDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int k = page * 4;
-		int j = k - 4;
+		int k = page * 5;
+		int j = k - 5;
 		List<Person> list = new ArrayList<Person>();
-		String sql = "select t.* from (select rownum num,GANGSTAPERSON.* from GANGSTAPERSON where rownum <= ?) t where num > ? ";
+		String sql = "select t.* from (select rownum num,GANGSTAPERSON.* from GANGSTAPERSON where identity ！=-1 and rownum <= ?) t where num > ? ";
 		try {
 			con = DBConnection.getConnection();
 			pstmt = con.prepareStatement(sql);
@@ -379,6 +379,7 @@ public class PersonDaoImpl implements PersonDao {
 				person.setState(rs.getInt(7));
 				list.add(person);
 			}
+			System.out.println("数据库中搜索的："+list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -406,13 +407,15 @@ public class PersonDaoImpl implements PersonDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int counts = 0;
-		String sql = "select count(*) from person";
+		String sql = "select count(*) from GANGSTAPERSON";
 		try {
 			con = DBConnection.getConnection();
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				counts = rs.getInt(1);
+				System.out.println("总个数："+counts);
+				
 			}
 
 		} catch (Exception e) {
@@ -439,10 +442,10 @@ public class PersonDaoImpl implements PersonDao {
 	@Override
 	public int getPages(int counts) {
 		int pages = 0;
-		if (counts % 4 == 0) {
-			pages = counts % 4;
+		if (counts % 5 == 0) {
+			pages = counts % 5;
 		} else {
-			pages = counts / 4 + 1;
+			pages = counts / 5 + 1;
 		}
 		return pages;
 
@@ -555,7 +558,8 @@ public class PersonDaoImpl implements PersonDao {
 //				String dateStr = rs.getString(4);
 //				Date date = formatter.parse(dateStr);
 //				notice.setUpdateDate(date);
-				notice.setUpdateDate(rs.getTimestamp(4));
+				String date = rs.getTimestamp(4).toString();
+				notice.setUpdateDate(date);
 //				System.out.println("数据库获取的时间："+rs.getTimestamp(4));
 				notice.setAuthor(rs.getString(5));
 				notice.setUrl(rs.getString(6));
@@ -586,7 +590,7 @@ public class PersonDaoImpl implements PersonDao {
 	@Override
 	public int deletePerson(String email) {
 
-		System.out.println("进入dao");
+		System.out.println("进入删除dao");
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int i = 0;

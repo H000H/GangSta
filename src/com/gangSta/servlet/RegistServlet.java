@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.Person;
 import com.gangSta.service.PersonService;
 
@@ -34,11 +35,11 @@ public class RegistServlet extends HttpServlet {
 		PersonService personService = new PersonService();
 		int i = 0;
 		// 获取表单数据
-		String password = request.getParameter("r_password");
-		String name = request.getParameter("r_name");
+		String password = request.getParameter("password");
+		String name = request.getParameter("username");
 		String email = request.getParameter("email");
 		// 前端获取的验证码
-		String vCode = request.getParameter("r_code");
+		String vCode = request.getParameter("code");
 		Person form = new Person();
 		// 由表单获取的信息建立的Person
 		form.setName(name);
@@ -47,8 +48,12 @@ public class RegistServlet extends HttpServlet {
 		form.setIdentity(0);
 		form.setState(0);
 		form.setVerify(vCode);
+		System.out.println("表单："+form);
 		try {
 			i = personService.registPerson(form);
+			FileFectory filefectory=new FileFectory();
+			filefectory.setFileFectory();
+			filefectory.insertPersonFileInfo(form);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

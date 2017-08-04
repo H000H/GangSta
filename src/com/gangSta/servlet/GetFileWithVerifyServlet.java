@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
 
 import com.gangSta.daoImpl.FileFectory;
-import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
 
@@ -47,10 +45,9 @@ public class GetFileWithVerifyServlet extends HttpServlet {
 		String result="......";
 		try {
 			HttpSession session=request.getSession();
-			Person person=(Person)session.getAttribute("person");
+			Person person =(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(person==null||person.getState()!=1)
-				return;
+			
 			MyFile myfile=new MyFile();
 			myfile.setShareverify((String)request.getParameter("verify"));
 			FileFectory fectory=new FileFectory();

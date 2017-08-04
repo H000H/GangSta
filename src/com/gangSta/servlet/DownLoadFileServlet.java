@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileUploadException;
 
 import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.MyFile;
@@ -48,8 +47,6 @@ public class DownLoadFileServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
 			//判断是否session为空
-			if(person==null||person.getState()!=1)
-				return;
 			MyFile myfile=new MyFile();
 			myfile.setFileid((String)request.getParameter("fileid"));
 			myfile.setEmail(person.getEmail());
@@ -61,6 +58,11 @@ public class DownLoadFileServlet extends HttpServlet {
 			String userAgent = request.getHeader("USER-AGENT"); 
 			fectory.downFile(myfile, userAgent, response);
 			fectory.closeConnection();
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out=response.getWriter();
+			out.write(result);
+			out.flush();
+			out.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			result="数据库出错啦";
