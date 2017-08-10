@@ -640,7 +640,7 @@ public class PersonDaoImpl implements PersonDao {
 			boolean b = password!=null&&!password.trim().isEmpty();
 			//若名字存在则添加该语句
 			if (a) {
-				intsertSql.append("name="+name);
+				intsertSql.append("name= '"+name+"' ");
 			}
 			//若都存在则添加逗号
 			if (a&&b) {
@@ -648,9 +648,10 @@ public class PersonDaoImpl implements PersonDao {
 			}
 			//若密码存在则添加该语句
 			if (b) {
-				intsertSql.append(" password = "+password);
+				intsertSql.append(" password = '"+password+"' ");
 			}
 			String sql = baseSql.append(intsertSql).append(whereSql).toString();
+			System.out.println(sql);
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
 			i = pstmt.executeUpdate();

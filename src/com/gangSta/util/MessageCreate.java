@@ -38,7 +38,7 @@ public class MessageCreate {
         // 用于组合文本和图片，"related"型的MimeMultipart对象 
         MimeMultipart contentMulti = new MimeMultipart("related");
         //正文文字部分
-    	MimeBodyPart textBody = new MimeBodyPart();
+    	MimeBodyPart textBody = new MimeBodyPart(); 	
 		// setContent(“邮件的正文内容”,”设置邮件内容的编码方式”)    
     	textBody.setContent("此邮件为系统自动发送"+ "<img src= \"cid:b_jpg\"></a>","text/html;charset=utf-8");
     	contentMulti.addBodyPart(textBody);

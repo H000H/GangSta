@@ -28,6 +28,7 @@ import com.gangSta.dao.FileDao;
 import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
+import com.gangSta.pojo.User;
 import com.gangSta.util.CreatMD5;
 import com.gangSta.util.DBConnection;
 
@@ -36,7 +37,7 @@ import com.gangSta.util.DBConnection;
  */
 public class FileFectory implements FileDao{
 	//web的根目录绝对地址
-	public static final String WebServiceConentPath="C:\\Users\\new\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\GangSta";
+	public static final String WebServiceConentPath="C:\\Users\\new\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\GangSta\\WEB-INF\\userfile";
 	public Connection conn;
 	public FileFectory() {
 	}
@@ -55,8 +56,8 @@ public class FileFectory implements FileDao{
 	//查询数据库，返回一个用户的所有文件 需要使用person中的email
 	@Override
 	public List<MyFile> selectPersonFiles(Person person,int page) throws SQLException {
-		int thispage=page*5;
-		int ppage=thispage-4;
+		int thispage=page*10;
+		int ppage=thispage-9;
 		
 		String sql="SELECT t.*,GangStaID FROM "
 				+ "(SELECT A.*, A.rowid GangStaID,rownum RN FROM (SELECT * FROM GangStaFile) A WHERE rownum <=?) t "
@@ -194,19 +195,53 @@ public class FileFectory implements FileDao{
 //				}
 				Disk disk=getPersonDiskUsed(person);
 				//超出大小,返回错误码为2
-				if(disk.getAll()<=disk.getUsed()+item.getSize()){
-					return 2;
-				}
+//				if(disk.getAll()<=disk.getUsed()+item.getSize()){
+//					return 2;
+//				}
 				dbfile.setSize(item.getSize());
 				
 					//注意：不同的浏览器提交的文件名是不一样的，有些浏览器提交上来的文件名是带有路径的，如：  c:\a\b\1.txt，而有些只是单纯的文件名，如：1.txt
 					//处理获取到的上传文件的文件名的路径部分，只保留文件名部分
 			    filename = filename.substring(filename.lastIndexOf("\\")+1);
 			    String fileExtName = filename.substring(filename.lastIndexOf(".")+1);
+			    switch(fileExtName){
+			    case "png":dbfile.setType("img");break;
+			    case "jpg":dbfile.setType("img");break;
+			    case "bmp":dbfile.setType("img");break;
+			    case "gif":dbfile.setType("img");break;
+			    case "jpeg":dbfile.setType("img");break;
+			    case "tiff":dbfile.setType("img");break;
+			    case "psd":dbfile.setType("img");break;
+			    case "svg":dbfile.setType("img");break;
+			    case "doc":dbfile.setType("file");break;
+			    case "xls":dbfile.setType("file");break;
+			    case "ppt":dbfile.setType("file");break;
+			    case "txt":dbfile.setType("file");break;
+			    case "torrent":dbfile.setType("seed");break;
+			    case "mp3":dbfile.setType("music");break;
+			    case "wav":dbfile.setType("music");break;
+			    case "cd":dbfile.setType("music");break;
+			    case "rm":dbfile.setType("music");break;
+			    case "ogg":dbfile.setType("music");break;
+			    case "wma":dbfile.setType("music");break;
+			    case "real":dbfile.setType("music");break;
+			    case "ape":dbfile.setType("music");break;
+			    case "module":dbfile.setType("music");break;
+			    case "midi":dbfile.setType("music");break;
+			    case "vqf":dbfile.setType("music");break;
+			    default:dbfile.setType("other");break;
+			    }
 			    dbfile.setFilename(filename);
 			    //这里需要一个文件修改；
-			    
-			    
+			    boolean tempA=false;
+			    int tempnumber=1;
+			    do{
+			    	tempA=selectSameFile(person, filename);
+			    	if(tempA){
+			    		filename=filename+"("+tempnumber+")";
+			    		dbfile.setFilename(filename);
+			    	}
+			    }while(tempA);
 			    //
 			    //获取item中的上传文件的输入流
 			    InputStream in = item.getInputStream();
@@ -358,8 +393,8 @@ public class FileFectory implements FileDao{
 	public Disk getDiskInfo() {
 		Disk disk=new Disk();
 		File diskfile=new File(FileFectory.WebServiceConentPath);
-		disk.setAll(1024*1024*1024*100);
-		disk.setUsed(diskfile.length());
+		disk.setAll(100);
+		disk.setUsed(diskfile.length()/1024);
 		return disk;
 	}
 	
@@ -367,7 +402,7 @@ public class FileFectory implements FileDao{
 	 * 这个函数用来向讲上传的文件信息输入到file表，修改table表的文件夹大小
 	 */
 	protected int insertFileInfo(MyFile myfile) throws SQLException{
-		String sqlInsert="insert into GangStaFile values(?,?,?, SYSDATE,SYSDATE,null)";
+		String sqlInsert="insert into GangStaFile values(?,?,?, SYSDATE,SYSDATE,null,?)";
 		String sqlUpdate="update GangStaFileTable set fsize=fsize+? where email=?";
 		PreparedStatement pst1=null;
 		PreparedStatement pst2=null;
@@ -375,6 +410,7 @@ public class FileFectory implements FileDao{
 		pst1.setString(1, myfile.getEmail());
 		pst1.setString(2,myfile.getFilename());
 		pst1.setLong(3, myfile.getSize());
+		pst1.setString(4,myfile.getType());
 		int a=0;
 		a=pst1.executeUpdate();
 		pst2=conn.prepareStatement(sqlUpdate);
@@ -413,12 +449,12 @@ public class FileFectory implements FileDao{
 		File file=null;
 		if(rs.next()){
 			identify=rs.getInt(2);
-			disk.setUsed(rs.getLong(1));
+			disk.setUsed(rs.getLong(1)/1024);
 			//根据文件地址获得文件
 			switch(identify){
-			case 0:disk.setAll(1024*1024*1024);break;
-			case 1:disk.setAll(1024*1024*1024);break;
-			case 2:disk.setAll(1024*1024*1024*5);break;
+			case 0:disk.setAll(1);break;
+			case 1:disk.setAll(1);break;
+			case 2:disk.setAll(5);break;
 			}
 		}
 		closefun1(rs, pst);
@@ -511,6 +547,68 @@ public class FileFectory implements FileDao{
 		result/=10;
 		closefun1(null, pst);
 		return ++result;
+	}
+	@Override
+	public boolean selectSameFile(Person person,String fileName) throws SQLException {
+		String sql="select * from gangStaFile where email=? and filename=?";
+		PreparedStatement pst=null;
+		pst=conn.prepareStatement(sql);
+		pst.setString(1,person.getEmail());
+		pst.setString(2, fileName);
+		boolean result;
+		ResultSet rs=pst.executeQuery();
+		if(rs.next())
+			result=true;
+		else
+			result=false;
+		closefun1(null, pst);
+		return result;
+	}
+	@Override
+	public User selectFileType(Person person, String type, int page) throws SQLException {
+		User user =new User();
+		String sql="select count(rownum) from gangStaFile where email=? and type=?";
+		PreparedStatement pst=null;
+		pst=conn.prepareStatement(sql);
+		pst.setString(1,person.getEmail());
+		pst.setString(2,type);
+		int result;
+		ResultSet rs=pst.executeQuery();
+		rs.next();
+		result=rs.getInt(1);
+		result/=10;
+		closefun1(null, pst);
+		
+		int thispage=page*10;
+		int ppage=thispage-9;
+		
+		String sql1="SELECT t.*,GangStaID FROM "
+				+ "(SELECT A.*, A.rowid GangStaID,rownum RN FROM (SELECT * FROM GangStaFile) A WHERE rownum <=?) t "
+				+ " WHERE RN >= ? and email=? and type=?";
+		PreparedStatement pst1=null;
+		List<MyFile> list=new ArrayList<>();
+		MyFile file;
+		pst1=conn.prepareStatement(sql1);
+		pst1.setInt(1, thispage);
+		pst1.setInt(2,ppage);
+		pst1.setString(3, person.getEmail());
+		pst1.setString(4,type);
+		ResultSet rs1=pst1.executeQuery();
+		while(rs1.next()){
+			file=new MyFile();
+			file.setEmail(rs1.getString(1));
+			file.setFilename(rs1.getString(2));
+			file.setSize(rs1.getLong(3));
+//			file.setUpdate(new java.util.Date(rs.getDate(4).getTime()));
+			file.setUpdate(rs1.getTimestamp(4).toString());
+			file.setShareverify(rs1.getString(6));
+			file.setFileid(rs1.getString(8));
+			list.add(file);
+		}
+		closefun1(rs1, pst1);
+		user.setList(list);
+		user.setPage(++result);
+		return user;
 	}
 	
 }

@@ -11,6 +11,9 @@ public class User {
 		this.disk = disk;this.page = page;this.person = person;this.list = list;
 	}
 	
+	public User() {
+	}
+
 	public Disk getDisk() {
 		return disk;
 	}

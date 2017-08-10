@@ -63,6 +63,8 @@ var  page = {
     "initPageEvent":function(listCount,fun){
         $("#"+page.pageId +">li[class='pageItem']").on("click",function(){
         	var $this = $(this);
+        	var type = $(".bar-top .on").attr("data-type");
+        	console.log(type);
         	var pagenumber = $(this).attr('page-data');
     	    var id = $(this.parentNode).attr('id');
     	    var url = "";
@@ -77,7 +79,10 @@ var  page = {
     	          url:url,
     	          datatype:"json",
     	          async:true,
-    	          data:{"pagenumber":pagenumber},
+    	          data:{
+    	        	  "pagenumber":pagenumber,
+    	        	  "type":type
+    	          },
     	          success:function(data){
     	        	  console.log(data);
     	        	  var result = JSON.parse(data);
@@ -88,7 +93,9 @@ var  page = {
     	        	  }
     	        	  page.setPageListCount(listCount,$this.attr("page-data"),fun); //设置列表总页码、当前页码，注意this
     	          },
-    	          error:function(){}
+    	          error:function(){
+    	        	  alert("分页ajax失败");
+    	          }
     		  });
            
         });

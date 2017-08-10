@@ -77,6 +77,7 @@ function renderRoot(data){
 	  });
 //公告3
   $('#public').on('click',function(){
+	  event.preventDefault();
 /*    var rank = $('.vip').attr("data-rank");*/
       $('.noticeBar1').removeClass("show");
       $('.noticeBar2').removeClass("show");
@@ -203,7 +204,7 @@ $(document).ready(function(){
       $('#username span').text(result.person.name);
       $('#username').attr("data-email", function() { return result.person.email });
       $('.vip').attr("data-rank", function() { return result.person.identity });
-      $('#disk').text(result.disk.used+'G/'+result.disk.all+'G');
+      $('#disk').text(result.disk.used+'KB/'+result.disk.all+'G');
       $caption = $('.content-display table caption');
       $caption1 = $('.content-display1 table caption');
       var $tab = $('.content-display');
@@ -247,7 +248,31 @@ $(document).ready(function(){
     $('.bar-top .on').removeClass("on");
     var type = $(this).attr('data-type');
     $(this).addClass("on");
-    alert("分类功能暂未开启，敬请期待");
+    var type = $(".bar-top .on").attr("data-type");
+	console.log(type);
+    $.ajax({
+    	type:"POST",
+        url:"SelectPersonFilesServlet",
+        datatype:"json",
+        async: true,
+        data:{
+        	"type":type,
+        	"pagenumber":1
+        },
+        success:function(data){
+        	console.log(data);
+        	var result = JSON.parse(data);
+        	var $tab = $('.content-display');
+            var $tab1 = $('.content-display1');
+        	 $tab.removeClass("onflex");
+             $tab1.addClass("onflex");
+             renderUser($tab1,result);
+             $("#page1").initPage(10*page,1,GG.kk);
+        },
+        error:function(){
+        	alert("分类点击AJAX失败sss");
+        }
+    });
   });
 
   // 修改信息
@@ -258,14 +283,14 @@ $(document).ready(function(){
     $('.changeForm').css({"display":"none"});
   });
   $('#changeBtn').on('click',function(){
+	event.preventDefault();
     var email = $('#username').attr('data-email');
     var username = $('#change-username').val();
     var pwd = $('#change-pwd').val();
     var pwd1 = $('#change-pwd1').val();
-    if(pwd == pwd1&&pwd!=null&&pwd1!=null){
       $.ajax({
-      type:"GET",
-      url:"servlet",
+      type:"POST",
+      url:"UpdateMsgServlet",
       datatype:"json",
       async: true,
       data:{
@@ -274,15 +299,12 @@ $(document).ready(function(){
         "password":pwd
       },
       success:function(data){
-        alert('修改信息成功');
+        alert(data);
       },
       error:function(){
-        alert('修改信息失败');
+  
       }
     });
-    }else{
-      alert("两次密码不一致！");
-    }
   });
   $('#leave-notice').on('click',function(){
     $('.noticeBar1').removeClass("show");
@@ -290,32 +312,6 @@ $(document).ready(function(){
     $('.noticeBar3').removeClass("show");
     $('.noticeBar').css({"display":"none"});
   });
-  //分页
-/*  $('#page li').on('click',function(e){
-    var curpage = $(this).attr('page-data');
-    $.ajax({
-      type:"GET",
-      url:"servlet",
-      datatype:"json",
-      async: true,
-      data:{"page":curpage},
-      success:function(data){
-      console.log(data);
-        var result = JSON.parseJSON(data);
-        //渲染表格
-        if(result.rank == -1){
-        var tbody = renderRoot(result);
-        }else{
-          tbody = renderUser(result);
-        }
-        $(".content-table tbody").html(tbody);
-      },
-      error:function(){
-        console.log('fail to change page');
-      }
-    });
-  });*/
-  
   //用户扩容
   $('#expand').on('click',function(){
     $.ajax({

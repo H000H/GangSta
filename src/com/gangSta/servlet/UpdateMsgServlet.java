@@ -31,14 +31,17 @@ public class UpdateMsgServlet extends HttpServlet {
 		PersonService personService = new PersonService();
 		Person form = new Person();
 		//从前端获取email、name、password元素
-		String email = request.getParameter("******");
-		String name = request.getParameter("******");
-		String password = request.getParameter("******");
+		String email = request.getParameter("email");
+		String name = request.getParameter("username");
+		String password = request.getParameter("password");
+		System.out.println("更新servlet:"+email+" "+name+" "+password);
 		//封装成person对象
 		form.setEmail(email);
 		form.setName(name);
 		form.setPassword(password);
+		System.out.println("更新servlet:"+form);
 		int i = personService.updateMsg(form);
+		System.out.println("i的值："+i);
 		if (i>0) {
 			String str = "{\"message\":\"更新成功！\"}";
 			PrintWriter out = response.getWriter();

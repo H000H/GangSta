@@ -17,6 +17,7 @@ import net.sf.json.JSONObject;
 import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
+import com.gangSta.pojo.User;
 
 /**
  * Servlet implementation class SelectPersonFilesServlet
@@ -49,16 +50,24 @@ public class SelectPersonFilesServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 			Person person=(Person)session.getAttribute("person");
 			//判断是否session为空
+			String type=request.getParameter("type");
 			int page=Integer.parseInt((String)request.getParameter("pagenumber"));
-			//判断是否有数据
-			FileFectory fectory=new FileFectory();
-			fectory.setFileFectory();
-			int pagenumber=fectory.selectFilePage(person);
-			if(page>pagenumber)
-				return;
-			List<MyFile> list=fectory.selectPersonFiles(person, page);
-			result=JSONObject.fromObject(new TempObject(pagenumber, list)).toString();
-			fectory.closeConnection();
+			if(type!=null&&!type.equals("all")){
+				FileFectory fectory=new FileFectory();
+				fectory.setFileFectory();
+				User user=fectory.selectFileType(person, type, page);
+				result=JSONObject.fromObject(user).toString();
+			}else{
+				//判断是否有数据
+				FileFectory fectory=new FileFectory();
+				fectory.setFileFectory();
+				int pagenumber=fectory.selectFilePage(person);
+				if(page>pagenumber)
+					return;
+				List<MyFile> list=fectory.selectPersonFiles(person, page);
+				result=JSONObject.fromObject(new TempObject(pagenumber, list)).toString();
+				fectory.closeConnection();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			result="数据库出错啦";

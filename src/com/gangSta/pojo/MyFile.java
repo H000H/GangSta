@@ -1,6 +1,5 @@
 package com.gangSta.pojo;
 
-import java.util.Date;
 
 public class MyFile {
 
@@ -10,6 +9,14 @@ public class MyFile {
 	private String update;
 	private String shareverify;
 	private String fileid;
+	private String type;
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getFileid() {
 		return fileid;
 	}

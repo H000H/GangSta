@@ -1,6 +1,6 @@
  /*change banner*/
  function changeImg(){
-  let className = $('#banner').attr("class");
+  var className = $('#banner').attr("class");
   switch(className){
     case "login-banner-2":
     $('#banner').removeClass();
@@ -19,6 +19,7 @@
 
 /*ready*/
 $(function(){
+  var loginUrl="http://localhost:8080/GangSta/welcome.html";
   //banner change
   setInterval(changeImg,3000);
   /*表单时间*/
@@ -46,7 +47,7 @@ $(function(){
       	}else if(result.email == "用户已经登录，不能重复登录！"){
       		alert("用户已经登录，不能重复登录！");
       	}else{
-      		window.location.href='http://localhost/GangSta/index.html';
+      		window.location.href=loginUrl;
       	}
       },
       error:function(){
@@ -56,6 +57,7 @@ $(function(){
   });
   // 发送验证码
   $('#send').on('click',function(){
+	  event.preventDefault();
     let email = $("#r_email").val();
     $.ajax({
       type:"POST",
@@ -71,6 +73,7 @@ $(function(){
   });
   // 创建帐号
   $('#create').on('click',function(){
+	  event.preventDefault();
       let email = $('#r_email').val();
       let username = $('#r_username').val();
       let pwd = $('#r_password').val();
@@ -90,7 +93,7 @@ $(function(){
         success:function(data){
         	console.log(data[1]);
             if (data[1] == "1") {
-            	window.location.href='http://localhost/GangSta/index.html';
+            	window.location.href=loginUrl;
             }else if(data[1] == "2"){
             	$("#login_form").removeClass('shake_effect');  
                 setTimeout(function(){

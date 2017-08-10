@@ -13,6 +13,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import com.gangSta.pojo.Disk;
 import com.gangSta.pojo.MyFile;
 import com.gangSta.pojo.Person;
+import com.gangSta.pojo.User;
 
 /*
  *该接口提供 文件的各种操作
@@ -49,4 +50,8 @@ public interface FileDao {
 	//查询总页数
 	//测试通过
 	public int selectFilePage(Person person)throws SQLException;
+	//查询某个文件是否存在
+	public boolean selectSameFile(Person person,String fileName) throws SQLException;
+	//按类型查询文件
+	public User selectFileType(Person person,String type,int page) throws SQLException;
 }

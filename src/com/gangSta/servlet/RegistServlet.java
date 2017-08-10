@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.gangSta.daoImpl.FileFectory;
 import com.gangSta.pojo.Person;
@@ -58,6 +59,9 @@ public class RegistServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		int[] array = new int[] { i };
+		HttpSession session=request.getSession();
+		form.setIdentity(1);
+		session.setAttribute("person", form);
 		JSONArray json = JSONArray.fromObject(array);
 		PrintWriter out = response.getWriter();
 		out.write(json.toString());
