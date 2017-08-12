@@ -600,7 +600,6 @@ public class PersonDaoImpl implements PersonDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
 			i = pstmt.executeUpdate();
-			System.out.println("结果"+i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
