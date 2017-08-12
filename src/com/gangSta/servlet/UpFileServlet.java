@@ -54,15 +54,21 @@ public class UpFileServlet extends HttpServlet {
 			case 2:result="超出大小..";break;
 			}
 			fectory.closeConnection();
+			request.setAttribute("info", result);
+			request.getRequestDispatcher("info.jsp").forward(request, response);
 		} catch (SQLException | FileUploadException e) {
 			e.printStackTrace();
-		}finally{
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out=response.getWriter();
-			out.write(result);
-			out.flush();
-			out.close();
 		}
+//		finally{
+//			response.setContentType("text/html;charset=utf-8");
+//			PrintWriter out=response.getWriter();
+//			out.write(result);
+//			out.flush();
+////			out.close();
+//			request.setAttribute("info", result);
+//			
+//			request.getRequestDispatcher("info.jsp").forward(request, response);
+//		}
 	}
 
 }

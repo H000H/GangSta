@@ -78,7 +78,7 @@ public class FileFectory implements FileDao{
 //			file.setUpdate(new java.util.Date(rs.getDate(4).getTime()));
 			file.setUpdate(rs.getTimestamp(4).toString());
 			file.setShareverify(rs.getString(6));
-			file.setFileid(rs.getString(7));
+			file.setFileid(rs.getString(8));
 			list.add(file);
 		}
 		closefun1(rs, pst);
@@ -238,8 +238,14 @@ public class FileFectory implements FileDao{
 			    do{
 			    	tempA=selectSameFile(person, filename);
 			    	if(tempA){
-			    		filename=filename+"("+tempnumber+")";
+			    		if(-1==filename.lastIndexOf('(')){
+			    			filename=filename.substring(0,filename.lastIndexOf('.'));
+			    		}else{
+			    			filename=filename.substring(0,filename.lastIndexOf('('));
+			    		}
+			    		filename=filename+"("+tempnumber+")."+fileExtName;
 			    		dbfile.setFilename(filename);
+			    		tempnumber++;
 			    	}
 			    }while(tempA);
 			    //

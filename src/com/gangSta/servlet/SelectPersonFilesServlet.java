@@ -52,11 +52,27 @@ public class SelectPersonFilesServlet extends HttpServlet {
 			//判断是否session为空
 			String type=request.getParameter("type");
 			int page=Integer.parseInt((String)request.getParameter("pagenumber"));
-			if(type!=null&&!type.equals("all")){
-				FileFectory fectory=new FileFectory();
-				fectory.setFileFectory();
-				User user=fectory.selectFileType(person, type, page);
-				result=JSONObject.fromObject(user).toString();
+			if(type!=null||type.equals("all")){
+				if(type.equals("all")){
+					FileFectory fectory=new FileFectory();
+					fectory.setFileFectory();
+					int pagenumber=fectory.selectFilePage(person);
+					System.out.print(page+" "+pagenumber+person.getEmail());
+					if(page>pagenumber)
+						return;
+					List<MyFile> list=fectory.selectPersonFiles(person, page);
+					User user=new User();
+					user.setList(list);
+					user.setPage(pagenumber);
+					result=JSONObject.fromObject(user).toString();
+					fectory.closeConnection();
+				}else{
+					FileFectory fectory=new FileFectory();
+					fectory.setFileFectory();
+					User user=fectory.selectFileType(person, type, page);
+					result=JSONObject.fromObject(user).toString();
+					fectory.closeConnection();
+				}
 			}else{
 				//判断是否有数据
 				FileFectory fectory=new FileFectory();
@@ -72,6 +88,8 @@ public class SelectPersonFilesServlet extends HttpServlet {
 			e.printStackTrace();
 			result="数据库出错啦";
 		}finally{
+			System.out.println("访问了数据");
+			System.out.println(result);
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter out=response.getWriter();
 			out.write(result);
